@@ -44,7 +44,7 @@ fun ReelsPlayer(
         })
     }
 
-    LaunchedEffect(playerUiState.isPaused) {
+    LaunchedEffect(key1 = playerUiState.isPaused, key2 = !playerUiState.isPaused) {
         if (!playerUiState.isPaused) exoPlayer.pause()
         else exoPlayer.play()
 
