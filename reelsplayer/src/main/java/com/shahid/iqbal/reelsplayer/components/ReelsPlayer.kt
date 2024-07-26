@@ -66,12 +66,9 @@ fun ReelsPlayer(
     val playerUiState by playerViewModel.playerUiState.collectAsStateWithLifecycle()
 
     val lifecycleOwner by rememberUpdatedState(newValue = LocalLifecycleOwner.current)
-
     val listOfVideos = remember { videoList }
     val index by remember { mutableIntStateOf(indexOfVideo) }
-
     val pageState = rememberPagerState(initialPage = index) { listOfVideos.size }
-
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build().apply {
             videoScalingMode = ReelsConfigUtils.getVideoScalingMode(reelConfig.videoScalingMode)
@@ -93,13 +90,16 @@ fun ReelsPlayer(
             })
         }
     }
-
     val lifecycleEventObserver = remember {
-        LifecycleEventObserver { source, event ->
+        LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_RESUME -> exoPlayer.play()
                 Lifecycle.Event.ON_PAUSE -> exoPlayer.pause()
-                Lifecycle.Event.ON_DESTROY -> exoPlayer.release()
+                Lifecycle.Event.ON_DESTROY -> {
+                    exoPlayer.stop()
+                    exoPlayer.release()
+                }
+
                 else -> Unit
             }
         }
@@ -113,8 +113,10 @@ fun ReelsPlayer(
     }
 
     LaunchedEffect(pageState.currentPage) {
-        exoPlayer.setMediaItem(MediaItem.fromUri(videoList[pageState.currentPage]))
-        exoPlayer.prepare()
+        with(exoPlayer) {
+            setMediaItem(MediaItem.fromUri(videoList[pageState.currentPage]))
+            prepare()
+        }
     }
 
 
@@ -137,6 +139,7 @@ fun ReelsPlayer(
         modifier = modifier,
         beyondBoundsPageCount = 0,
         pageSpacing = pageSpacing,
+
         contentPadding = contentPadding,
         key = { videoList[it] }) { page ->
 
@@ -149,8 +152,11 @@ fun ReelsPlayer(
                         setPlayerAttributes(reelConfig)
                         hideControllersViews()
                     }
-                }, modifier = Modifier.fillMaxSize(), update = {
+                }, modifier = Modifier.fillMaxSize(),
+                    update = {
                     exoPlayer.playWhenReady = true
+                    }, onRelease = {
+                        it.player = null
                 })
 
 
