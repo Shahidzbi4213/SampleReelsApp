@@ -4,11 +4,11 @@ import android.util.Size
 import android.view.ViewGroup.LayoutParams
 import androidx.annotation.Keep
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import com.shahid.iqbal.reelsplayer.actions.PlayerResizeMode
 import com.shahid.iqbal.reelsplayer.actions.RepeatMode
 import com.shahid.iqbal.reelsplayer.actions.ThumbnailDisplayMode
 import com.shahid.iqbal.reelsplayer.actions.VideoScalingMode
-import com.shahid.iqbal.reelsplayer.components.DefaultVideoLoader
 
 
 /**
@@ -24,6 +24,7 @@ import com.shahid.iqbal.reelsplayer.components.DefaultVideoLoader
  *                      and displays details for the specified reel.
  * @property playerLoader A composable function to display the video loader.
  */
+@Stable
 @Keep
 data class ReelsConfig(
     var playerResizeMode: PlayerResizeMode = PlayerResizeMode.FILL,
@@ -33,6 +34,6 @@ data class ReelsConfig(
     val showControlsMenu: Boolean = false,
     var playerSize: Size = Size(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT),
     var reelDetail: (@Composable (Int) -> Unit)? = null,
-    var playerLoader: (@Composable () -> Unit)? = { DefaultVideoLoader() },
+    var playerLoader: (@Composable () -> Unit)? = null,
 )
 

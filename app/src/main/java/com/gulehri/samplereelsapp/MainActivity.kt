@@ -22,11 +22,16 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
                     ReelsPlayer(
-                        modifier = Modifier.padding(innerPadding),
-                        videoList = listOf(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding),
+                        videoList = listOf(
+                            "https://vue-3-tiktok.vercel.app/video1.mp4",
+                            "https://vue-3-tiktok.vercel.app/video2.mp4"
+                        ),
                         indexOfVideo = 0,
 
-                    )
+                        )
                 }
             }
         }
