@@ -31,8 +31,7 @@ fun DefaultVideoLoader(
     strokeWidth: Dp = 5.dp,
 ) {
     CircularProgressIndicator(
-        modifier = modifier
-            .size(50.dp),
+        modifier = modifier.size(50.dp),
         color = progressColor,
         strokeWidth = strokeWidth,
         strokeCap = StrokeCap.Round

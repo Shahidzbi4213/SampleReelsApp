@@ -69,6 +69,7 @@ fun ReelsPlayer(
     val listOfVideos = remember { videoList }
     val index by remember { mutableIntStateOf(indexOfVideo) }
     val pageState = rememberPagerState(initialPage = index) { listOfVideos.size }
+
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build().apply {
             videoScalingMode = ReelsConfigUtils.getVideoScalingMode(reelConfig.videoScalingMode)
@@ -90,6 +91,7 @@ fun ReelsPlayer(
             })
         }
     }
+
     val lifecycleEventObserver = remember {
         LifecycleEventObserver { _, event ->
             when (event) {
@@ -159,13 +161,10 @@ fun ReelsPlayer(
                         it.player = null
                 })
 
-
                 if (playerUiState.isLoading) {
                     reelConfig.playerLoader?.invoke() ?: DefaultVideoLoader(
                         modifier = Modifier
-                            .align(
-                                Alignment.Center
-                            )
+                            .align(Alignment.Center)
                             .size(30.dp)
                     )
                 }
