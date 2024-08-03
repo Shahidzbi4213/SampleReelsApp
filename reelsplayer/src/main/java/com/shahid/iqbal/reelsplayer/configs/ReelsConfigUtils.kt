@@ -1,4 +1,4 @@
-package com.shahid.iqbal.reelsplayer.configs;
+package com.shahid.iqbal.reelsplayer.configs
 
 import android.view.ViewGroup
 import androidx.annotation.OptIn
@@ -15,8 +15,6 @@ import com.shahid.iqbal.reelsplayer.actions.VideoScalingMode
 /*
  * Created by Shahid Iqbal on 7/20/2024.
  */
-
-
 
 @OptIn(UnstableApi::class)
 object ReelsConfigUtils {
@@ -70,6 +68,5 @@ object ReelsConfigUtils {
         resizeMode = getResizeMode(reelConfig.playerResizeMode)
         artworkDisplayMode = getThumbnailDisplayMode(reelConfig.thumbnailDisplayMode)
     }
-
 
 }

@@ -2,10 +2,7 @@ package com.shahid.iqbal.reelsplayer.components
 
 import androidx.annotation.OptIn
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
@@ -14,13 +11,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -29,12 +23,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.ui.PlayerView
+import androidx.media3.exoplayer.hls.HlsMediaSource
 import com.shahid.iqbal.reelsplayer.configs.ReelsConfig
 import com.shahid.iqbal.reelsplayer.configs.ReelsConfigUtils
-import com.shahid.iqbal.reelsplayer.configs.ReelsConfigUtils.hideControllersViews
-import com.shahid.iqbal.reelsplayer.configs.ReelsConfigUtils.setPlayerAttributes
 
 /*
  * Created by Shahid Iqbal on 7/20/2024.
@@ -62,10 +55,11 @@ fun ReelsPlayer(
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+
     val playerViewModel: PlayerViewModel = viewModel()
     val playerUiState by playerViewModel.playerUiState.collectAsStateWithLifecycle()
 
-    val lifecycleOwner by rememberUpdatedState(newValue = LocalLifecycleOwner.current)
     val listOfVideos = remember { videoList }
     val index by remember { mutableIntStateOf(indexOfVideo) }
     val pageState = rememberPagerState(initialPage = index) { listOfVideos.size }
@@ -74,6 +68,7 @@ fun ReelsPlayer(
         ExoPlayer.Builder(context).build().apply {
             videoScalingMode = ReelsConfigUtils.getVideoScalingMode(reelConfig.videoScalingMode)
             repeatMode = ReelsConfigUtils.getVideoRepeatMode(reelConfig.repeatMode)
+            setHandleAudioBecomingNoisy(true)
             addListener(object : Player.Listener {
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     when (playbackState) {
@@ -116,7 +111,12 @@ fun ReelsPlayer(
 
     LaunchedEffect(pageState.currentPage) {
         with(exoPlayer) {
-            setMediaItem(MediaItem.fromUri(videoList[pageState.currentPage]))
+            setMediaSource(
+                HlsMediaSource.Factory(DefaultHttpDataSource.Factory())
+                    .createMediaSource(
+                        MediaItem.Builder().setUri(videoList[pageState.currentPage]).build()
+                    )
+            )
             prepare()
         }
     }
@@ -141,36 +141,16 @@ fun ReelsPlayer(
         modifier = modifier,
         beyondBoundsPageCount = 0,
         pageSpacing = pageSpacing,
-
         contentPadding = contentPadding,
         key = { videoList[it] }) { page ->
 
-        Box(modifier = Modifier.fillMaxSize()) {
-
-            if (page == pageState.currentPage) {
-                AndroidView({ ctx ->
-                    PlayerView(ctx).apply {
-                        player = exoPlayer
-                        setPlayerAttributes(reelConfig)
-                        hideControllersViews()
-                    }
-                }, modifier = Modifier.fillMaxSize(),
-                    update = {
-                    exoPlayer.playWhenReady = true
-                    }, onRelease = {
-                        it.player = null
-                })
-
-                if (playerUiState.isLoading) {
-                    reelConfig.playerLoader?.invoke() ?: DefaultVideoLoader(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .size(30.dp)
-                    )
-                }
-            }
-        }
-
+        PageContent(
+            exoPlayer = exoPlayer,
+            page = page,
+            pagerState = pageState,
+            reelConfig = reelConfig,
+            isPlayerLoading = playerUiState.isLoading
+        )
     }
 }
 

@@ -1,6 +1,5 @@
 package com.shahid.iqbal.reelsplayer.actions
 
-import androidx.compose.runtime.Stable
 import com.shahid.iqbal.reelsplayer.actions.VideoScalingMode.DEFAULT
 import com.shahid.iqbal.reelsplayer.actions.VideoScalingMode.FIT
 import com.shahid.iqbal.reelsplayer.actions.VideoScalingMode.FIT_WITH_CROPPING
@@ -14,7 +13,6 @@ import com.shahid.iqbal.reelsplayer.actions.VideoScalingMode.FIT_WITH_CROPPING
  * @property FIT_WITH_CROPPING Scales the video to fill the player's bounds, which may involve cropping parts of the video.
  */
 
-@Stable
 enum class VideoScalingMode {
     DEFAULT, FIT, FIT_WITH_CROPPING
 }

@@ -1,6 +1,5 @@
 package com.shahid.iqbal.reelsplayer.actions
 
-import androidx.compose.runtime.Stable
 import com.shahid.iqbal.reelsplayer.actions.ThumbnailDisplayMode.FILL
 import com.shahid.iqbal.reelsplayer.actions.ThumbnailDisplayMode.FIT
 import com.shahid.iqbal.reelsplayer.actions.ThumbnailDisplayMode.OFF
@@ -12,8 +11,6 @@ import com.shahid.iqbal.reelsplayer.actions.ThumbnailDisplayMode.OFF
  * @property FIT Thumbnails are scaled to fit within the display area, maintaining aspect ratio.
  * @property FILL Thumbnails are scaled to fill the display area, potentially cropping the image.
  */
-
-@Stable
 enum class ThumbnailDisplayMode {
     OFF, FIT, FILL
 }

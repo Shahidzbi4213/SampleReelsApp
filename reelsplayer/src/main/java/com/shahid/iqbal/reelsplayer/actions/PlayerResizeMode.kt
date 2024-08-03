@@ -1,6 +1,5 @@
 package com.shahid.iqbal.reelsplayer.actions
 
-import androidx.compose.runtime.Stable
 import com.shahid.iqbal.reelsplayer.actions.PlayerResizeMode.FILL
 import com.shahid.iqbal.reelsplayer.actions.PlayerResizeMode.FIT
 import com.shahid.iqbal.reelsplayer.actions.PlayerResizeMode.FIXED_HEIGHT
@@ -21,7 +20,6 @@ import com.shahid.iqbal.reelsplayer.actions.PlayerResizeMode.ZOOM
  * @property FIXED_HEIGHT Maintains a fixed height for the video, adjusting the width to maintain aspect ratio.
  */
 
-@Stable
 enum class PlayerResizeMode {
     FIT, FILL, ZOOM, FIXED_WIDTH, FIXED_HEIGHT
 }

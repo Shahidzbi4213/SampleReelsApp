@@ -27,13 +27,13 @@ import com.shahid.iqbal.reelsplayer.actions.VideoScalingMode
 @Stable
 @Keep
 data class ReelsConfig(
-    var playerResizeMode: PlayerResizeMode = PlayerResizeMode.FILL,
-    var videoScalingMode: VideoScalingMode = VideoScalingMode.FIT_WITH_CROPPING,
-    var repeatMode: RepeatMode = RepeatMode.CURRENT,
-    var thumbnailDisplayMode: ThumbnailDisplayMode = ThumbnailDisplayMode.FILL,
+    val playerResizeMode: PlayerResizeMode = PlayerResizeMode.FILL,
+    val videoScalingMode: VideoScalingMode = VideoScalingMode.FIT_WITH_CROPPING,
+    val repeatMode: RepeatMode = RepeatMode.CURRENT,
+    val thumbnailDisplayMode: ThumbnailDisplayMode = ThumbnailDisplayMode.FILL,
     val showControlsMenu: Boolean = false,
-    var playerSize: Size = Size(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT),
-    var reelDetail: (@Composable (Int) -> Unit)? = null,
-    var playerLoader: (@Composable () -> Unit)? = null,
+    val playerSize: Size = Size(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT),
+    val reelDetail: (@Composable (Int) -> Unit)? = null,
+    val playerLoader: (@Composable () -> Unit)? = null,
 )
 

@@ -27,7 +27,9 @@ class MainActivity : ComponentActivity() {
                             .padding(innerPadding),
                         videoList = listOf(
                             "https://vue-3-tiktok.vercel.app/video1.mp4",
-                            "https://vue-3-tiktok.vercel.app/video2.mp4"
+                            "https://vue-3-tiktok.vercel.app/video2.mp4",
+                            "https://i.imgur.com/rzhgpNQ.mp4",
+                            "https://www.instagram.com/reel/C82D-F4vNNv/?igsh=aGwzb3pteG45OGl2",
                         ),
                         indexOfVideo = 0,
 
