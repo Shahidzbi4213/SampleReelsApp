@@ -34,11 +34,10 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 media-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "exoplayer" }
 media-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "exoplayer" }
 media-common = { group = "androidx.media3", name = "media3-common", version.ref = "exoplayer" }
-media-hls = { module = "androidx.media3:media3-exoplayer-hls", version.ref = "exoplayer" }
 
 
 [bundles]
-media3Exoplayer = ["media-exoplayer", "media-ui", "media-hls", "media-common"]
+media3Exoplayer = ["media-exoplayer", "media-ui", "media-common"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

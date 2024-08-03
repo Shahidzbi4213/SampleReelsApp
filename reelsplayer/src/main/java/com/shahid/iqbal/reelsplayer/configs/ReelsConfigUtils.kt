@@ -1,10 +1,16 @@
 package com.shahid.iqbal.reelsplayer.configs
 
+import android.content.Context
 import android.view.ViewGroup
 import androidx.annotation.OptIn
 import androidx.media3.common.C
 import androidx.media3.common.util.RepeatModeUtil
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.database.StandaloneDatabaseProvider
+import androidx.media3.datasource.DefaultHttpDataSource
+import androidx.media3.datasource.cache.CacheDataSource
+import androidx.media3.datasource.cache.LeastRecentlyUsedCacheEvictor
+import androidx.media3.datasource.cache.SimpleCache
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import com.shahid.iqbal.reelsplayer.actions.PlayerResizeMode
@@ -67,6 +73,27 @@ object ReelsConfigUtils {
         useController = reelConfig.showControlsMenu
         resizeMode = getResizeMode(reelConfig.playerResizeMode)
         artworkDisplayMode = getThumbnailDisplayMode(reelConfig.thumbnailDisplayMode)
+    }
+
+    fun cachingWorkFactory(context: Context): CacheReel {
+        // Note: This should be a singleton in your app.
+        val databaseProvider = StandaloneDatabaseProvider(context)
+
+// An on-the-fly cache should evict media when reaching a maximum disk space limit.
+        val cache =
+            SimpleCache(
+                context.cacheDir,
+                LeastRecentlyUsedCacheEvictor(40 * 10_48_576), databaseProvider
+            )
+
+// Configure the DataSource.Factory with the cache and factory for the desired HTTP stack.
+        val cacheDataSourceFactory =
+            CacheDataSource.Factory()
+                .setCache(cache)
+                .setUpstreamDataSourceFactory(DefaultHttpDataSource.Factory())
+
+        return CacheReel(cache, cacheDataSourceFactory)
+
     }
 
 }

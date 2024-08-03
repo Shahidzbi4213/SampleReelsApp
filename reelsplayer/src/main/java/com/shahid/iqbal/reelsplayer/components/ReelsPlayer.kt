@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
@@ -20,14 +21,16 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.hls.HlsMediaSource
+import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import com.shahid.iqbal.reelsplayer.configs.ReelsConfig
 import com.shahid.iqbal.reelsplayer.configs.ReelsConfigUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /*
  * Created by Shahid Iqbal on 7/20/2024.
@@ -63,12 +66,17 @@ fun ReelsPlayer(
     val listOfVideos = remember { videoList }
     val index by remember { mutableIntStateOf(indexOfVideo) }
     val pageState = rememberPagerState(initialPage = index) { listOfVideos.size }
+    var scope = rememberCoroutineScope { Dispatchers.IO }
+
+    val cacheReel = remember { ReelsConfigUtils.cachingWorkFactory(context) }
 
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build().apply {
             videoScalingMode = ReelsConfigUtils.getVideoScalingMode(reelConfig.videoScalingMode)
             repeatMode = ReelsConfigUtils.getVideoRepeatMode(reelConfig.repeatMode)
             setHandleAudioBecomingNoisy(true)
+            setPriority(C.PRIORITY_PLAYBACK)
+            increaseDeviceVolume(C.VOLUME_FLAG_PLAY_SOUND)
             addListener(object : Player.Listener {
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     when (playbackState) {
@@ -104,7 +112,9 @@ fun ReelsPlayer(
 
 
 
-    LaunchedEffect(key1 = playerUiState.isPaused, key2 = !playerUiState.isPaused) {
+    LaunchedEffect(
+        key1 = playerUiState.isPaused, key2 = !playerUiState.isPaused
+    ) {
         if (!playerUiState.isPaused) exoPlayer.pause()
         else exoPlayer.play()
     }
@@ -112,8 +122,7 @@ fun ReelsPlayer(
     LaunchedEffect(pageState.currentPage) {
         with(exoPlayer) {
             setMediaSource(
-                HlsMediaSource.Factory(DefaultHttpDataSource.Factory())
-                    .createMediaSource(
+                ProgressiveMediaSource.Factory(cacheReel.cacheDataSource).createMediaSource(
                         MediaItem.Builder().setUri(videoList[pageState.currentPage]).build()
                     )
             )
@@ -125,7 +134,10 @@ fun ReelsPlayer(
 
     DisposableEffect(key1 = Unit) {
         onDispose {
-            exoPlayer.release()
+            scope.launch {
+                cacheReel.cache.release()
+                exoPlayer.release()
+            }
         }
     }
 

@@ -31,9 +31,10 @@ fun PageContent(
     isPlayerLoading: Boolean,
 ) {
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = modifier.fillMaxSize()) {
 
         if (page == pagerState.currentPage) {
+
             AndroidView({ ctx ->
                 PlayerView(ctx).apply {
                     player = exoPlayer
@@ -51,8 +52,9 @@ fun PageContent(
             if (isPlayerLoading) {
                 reelConfig.playerLoader?.invoke() ?: DefaultVideoLoader(
                     modifier = Modifier
+                        .size(50.dp)
                         .align(Alignment.Center)
-                        .size(30.dp)
+
                 )
             }
 
