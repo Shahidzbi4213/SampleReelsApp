@@ -1,10 +1,11 @@
 <h1 align="center">Reels Player</h1>
-<h4 align="center">A Jetpack Compose library to Players Videos Like Tiktok .</h4>
+<h4 align="center">A Jetpack Compose library to Playe sVideos Like Tiktok/Instagram .</h4>
 
 
 <div align="center">
-  <sub>Built with ❤︎ by
+  <h3>Built with ❤︎ by
   <a href="https://twitter.com/shahidzbi">Shahid Iqbal</a>
+  </h3>
 </div>
 <br/>
 <br/>
