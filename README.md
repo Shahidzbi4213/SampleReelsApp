@@ -32,6 +32,12 @@ Or you can find latest version and changelogs in the [releases](https://github.c
 
 ```kotlin
 
+  ReelsPlayer(modifier = Modifier.fillMaxSize(),
+                            videoList = listOf(),
+                            indexOfVideo = 0){ page ->
+                            //Perform Other Operation Based on Page Number
+                        }
+
 ```
 
 
