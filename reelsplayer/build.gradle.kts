@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("maven-publish")
 }
 
 android {
@@ -19,7 +20,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -56,4 +57,18 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.bundles.media3Exoplayer)
 
+}
+
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "com.github.shahidzbi4213"
+            artifactId = "reels-player"
+            version = "1.0.0-beta"
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
 }
