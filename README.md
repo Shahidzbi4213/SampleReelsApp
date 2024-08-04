@@ -16,10 +16,16 @@
 <br/>
         
 ## 💻 Installation
+In `settings.gradle` of  `app` module in this 
+
+```
+ maven(url = "https://jitpack.io")
+````
+
 In `build.gradle` of `app` module, include this dependency
         
-```groovy
- implementation 'com.github.Shahidzbi4213:SampleReelsApp:x.y.z'
+```
+ implementation ("com.github.Shahidzbi4213:SampleReelsApp:x.y.z")
 ```
         
 Please replace x, y and z with the latest version numbers ![](https://img.shields.io/jitpack/version/com.github.Shahidzbi4213/SampleReelsApp.svg).
@@ -32,11 +38,24 @@ Or you can find latest version and changelogs in the [releases](https://github.c
 
 ```kotlin
 
-  ReelsPlayer(modifier = Modifier.fillMaxSize(),
-                            videoList = listOf(),
-                            indexOfVideo = 0){ page ->
-                            //Perform Other Operation Based on Page Number
-                        }
+  ReelsPlayer(
+    modifier = Modifier.fillMaxSize(),
+    videoList = listOf(),
+    indexOfVideo = 0,
+    config = ReelsConfig(
+        playerResizeMode = PlayerResizeMode.FILL,
+        videoScalingMode = VideoScalingMode.FIT_WITH_CROPPING,
+        repeatMode = RepeatMode.ALL,
+        thumbnailDisplayMode = ThumbnailDisplayMode.FILL,
+        showControlsMenu = true,
+        enableCache = true,
+        playerSize = Size(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT),
+        playerLoader = { /* Custom Loader Composable */ }
+    )
+) { page ->
+    // Perform Other Operation Based on Page Number
+}
+
 
 ```
 
