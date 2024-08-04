@@ -64,14 +64,14 @@ dependencies {
 }
 
 
-publishing {
-    publications {
-        register<MavenPublication>("release") {
-            groupId = "com.github.shahidzbi4213"
-            artifactId = "reels-player"
-            version = "1.0.2-beta"
-            afterEvaluate {
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("maven") {
                 from(components["release"])
+                groupId = "com.github.shahidzbi4213"
+                artifactId = "reels-player"
+                version = "1.0.3-beta"
             }
         }
     }
