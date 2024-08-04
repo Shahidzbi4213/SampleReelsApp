@@ -28,11 +28,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "11"
     }
 
     buildFeatures {
@@ -52,7 +52,7 @@ dependencies {
 
     //noinspection UseTomlInstead
     implementation("androidx.lifecycle:lifecycle-runtime-compose-android:2.8.4")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose-android:2.8.4")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.4")
     implementation(platform("androidx.compose:compose-bom:2024.06.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material3:material3-android:1.2.1")
