@@ -71,7 +71,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.shahidzbi4213"
                 artifactId = "reels-player"
-                version = "1.0.3-beta"
+                version = "1.0.4-beta"
             }
         }
     }
