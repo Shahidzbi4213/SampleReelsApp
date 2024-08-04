@@ -19,9 +19,8 @@ import com.shahid.iqbal.reelsplayer.actions.VideoScalingMode
  * @property repeatMode The repeat mode for video playback.
  * @property thumbnailDisplayMode The display mode for thumbnails.
  * @property showControlsMenu Whether to show the controls menu.
+ * @property enableCache Whether to cache the video and load from cache if user scroll back and forth.
  * @property playerSize The size of the video player.
- * @property reelDetail A composable function that takes an integer representing the video index
- *                      and displays details for the specified reel.
  * @property playerLoader A composable function to display the video loader.
  */
 @Stable
@@ -32,8 +31,8 @@ data class ReelsConfig(
     val repeatMode: RepeatMode = RepeatMode.CURRENT,
     val thumbnailDisplayMode: ThumbnailDisplayMode = ThumbnailDisplayMode.FILL,
     val showControlsMenu: Boolean = false,
+    val enableCache: Boolean = true,
     val playerSize: Size = Size(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT),
-    val reelDetail: (@Composable (Int) -> Unit)? = null,
     val playerLoader: (@Composable () -> Unit)? = null,
 )
 

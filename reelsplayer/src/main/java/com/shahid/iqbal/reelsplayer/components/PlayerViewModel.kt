@@ -17,6 +17,7 @@ class PlayerViewModel : ViewModel() {
     val playerUiState get() = _playerUiState.asStateFlow()
 
 
+
     fun updatePauseState(pause: Boolean) {
         viewModelScope.launch { _playerUiState.update { it.copy(isPaused = pause) } }
     }
@@ -24,4 +25,6 @@ class PlayerViewModel : ViewModel() {
     fun updateLoadingState(loading: Boolean) {
         viewModelScope.launch { _playerUiState.update { it.copy(isLoading = loading) } }
     }
+
+
 }

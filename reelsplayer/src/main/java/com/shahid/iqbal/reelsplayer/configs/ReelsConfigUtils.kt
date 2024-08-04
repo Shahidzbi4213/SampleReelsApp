@@ -1,6 +1,9 @@
 package com.shahid.iqbal.reelsplayer.configs
 
 import android.content.Context
+import android.os.Environment
+import android.os.StatFs
+import android.util.Log
 import android.view.ViewGroup
 import androidx.annotation.OptIn
 import androidx.media3.common.C
@@ -17,6 +20,10 @@ import com.shahid.iqbal.reelsplayer.actions.PlayerResizeMode
 import com.shahid.iqbal.reelsplayer.actions.RepeatMode
 import com.shahid.iqbal.reelsplayer.actions.ThumbnailDisplayMode
 import com.shahid.iqbal.reelsplayer.actions.VideoScalingMode
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.io.File
 
 /*
  * Created by Shahid Iqbal on 7/20/2024.
@@ -75,18 +82,31 @@ object ReelsConfigUtils {
         artworkDisplayMode = getThumbnailDisplayMode(reelConfig.thumbnailDisplayMode)
     }
 
-    fun cachingWorkFactory(context: Context): CacheReel {
-        // Note: This should be a singleton in your app.
-        val databaseProvider = StandaloneDatabaseProvider(context)
 
-// An on-the-fly cache should evict media when reaching a maximum disk space limit.
+    private fun getDirectory(context: Context): File = File(context.cacheDir, "ReelsPlayer")
+
+    private fun getAvailableSpace(): Long {
+        val externalStorageDir = Environment.getExternalStorageDirectory()
+        val stat = StatFs(externalStorageDir.path)
+        val bytesAvailable = stat.availableBlocksLong * stat.blockSizeLong
+        return (bytesAvailable * 0.20).toLong()
+    }
+
+
+    fun cachingWorkFactory(context: Context): CacheReel {
+        val databaseProvider = StandaloneDatabaseProvider(context)
+        val maxBytes = getAvailableSpace()
+
+        Log.d("RRR", "cachingWorkFactory: $maxBytes ")
+
+
         val cache =
             SimpleCache(
-                context.cacheDir,
-                LeastRecentlyUsedCacheEvictor(40 * 10_48_576), databaseProvider
+                getDirectory(context),
+                LeastRecentlyUsedCacheEvictor(maxBytes),
+                databaseProvider
             )
 
-// Configure the DataSource.Factory with the cache and factory for the desired HTTP stack.
         val cacheDataSourceFactory =
             CacheDataSource.Factory()
                 .setCache(cache)
@@ -94,6 +114,14 @@ object ReelsConfigUtils {
 
         return CacheReel(cache, cacheDataSourceFactory)
 
+    }
+
+
+    fun clearResources(context: Context, cacheReel: CacheReel) {
+        CoroutineScope(Dispatchers.IO).launch {
+            cacheReel.cache.release()
+            getDirectory(context).deleteOnExit()
+        }
     }
 
 }

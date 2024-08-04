@@ -11,7 +11,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
@@ -25,12 +24,11 @@ import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import com.shahid.iqbal.reelsplayer.configs.ReelsConfig
 import com.shahid.iqbal.reelsplayer.configs.ReelsConfigUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 /*
  * Created by Shahid Iqbal on 7/20/2024.
@@ -54,19 +52,21 @@ fun ReelsPlayer(
     reelConfig: ReelsConfig = ReelsConfig(),
     videoList: List<String>,
     indexOfVideo: Int = 0,
-    pageSpacing: Dp = 10.dp,
+    pageSpacing: Dp = 0.dp,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-) {
+    currentPage: (Int) -> Unit,
+
+    ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
     val playerViewModel: PlayerViewModel = viewModel()
     val playerUiState by playerViewModel.playerUiState.collectAsStateWithLifecycle()
 
+
     val listOfVideos = remember { videoList }
     val index by remember { mutableIntStateOf(indexOfVideo) }
     val pageState = rememberPagerState(initialPage = index) { listOfVideos.size }
-    var scope = rememberCoroutineScope { Dispatchers.IO }
 
     val cacheReel = remember { ReelsConfigUtils.cachingWorkFactory(context) }
 
@@ -101,6 +101,9 @@ fun ReelsPlayer(
                 Lifecycle.Event.ON_RESUME -> exoPlayer.play()
                 Lifecycle.Event.ON_PAUSE -> exoPlayer.pause()
                 Lifecycle.Event.ON_DESTROY -> {
+
+                    if (reelConfig.enableCache) ReelsConfigUtils.clearResources(context, cacheReel)
+
                     exoPlayer.stop()
                     exoPlayer.release()
                 }
@@ -122,23 +125,20 @@ fun ReelsPlayer(
     LaunchedEffect(pageState.currentPage) {
         with(exoPlayer) {
             setMediaSource(
-                ProgressiveMediaSource.Factory(cacheReel.cacheDataSource).createMediaSource(
+                ProgressiveMediaSource.Factory(if (reelConfig.enableCache) cacheReel.cacheDataSource else DefaultHttpDataSource.Factory())
+                    .createMediaSource(
                         MediaItem.Builder().setUri(videoList[pageState.currentPage]).build()
                     )
             )
             prepare()
         }
+        currentPage(pageState.currentPage)
     }
 
 
 
     DisposableEffect(key1 = Unit) {
-        onDispose {
-            scope.launch {
-                cacheReel.cache.release()
-                exoPlayer.release()
-            }
-        }
+        onDispose { exoPlayer.release() }
     }
 
     DisposableEffect(lifecycleOwner) {
