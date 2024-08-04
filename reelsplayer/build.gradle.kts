@@ -28,11 +28,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 
     buildFeatures {
@@ -69,7 +69,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.github.shahidzbi4213"
             artifactId = "reels-player"
-            version = "1.0.0-beta"
+            version = "1.0.2-beta"
             afterEvaluate {
                 from(components["release"])
             }
