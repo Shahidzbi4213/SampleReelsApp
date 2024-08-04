@@ -16,7 +16,7 @@
 <br/>
         
 ## 💻 Installation
-In `settings.gradle` of  `app` module in this 
+In `settings.gradle` of  `app` module include this 
 
 ```
  maven(url = "https://jitpack.io")
