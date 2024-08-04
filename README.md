@@ -1,4 +1,3 @@
-<div align="center"><img src="https://user-images.githubusercontent.com/8867121/154110583-1e5364de-3106-47c7-9b94-bf8b1e9d6ff3.gif"/></div>
 <h1 align="center">Reels Player</h1>
 <h4 align="center">A Jetpack Compose library to Players Videos Like Tiktok .</h4>
 
@@ -41,8 +40,8 @@ Or you can find latest version and changelogs in the [releases](https://github.c
         
 ## 👨 Developed By
 
-<a href="https://twitter.com/shahidzbi" target="_blank">
-  <img src="https://avatars1.githubusercontent.com/u/8867121?s=460&v=4" width="70" align="left">
+<a href="https://www.linkedin.com/in/shahidzbi/" target="_blank">
+  <img src="https://avatars.githubusercontent.com/u/45350491?s=400&u=fbed8c656d79514e0acf50df2aa24a4953a5fd46&v=4" width="70" align="left">
 </a>
 
 **Shahid Iqbal**
