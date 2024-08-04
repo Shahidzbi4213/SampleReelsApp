@@ -1,6 +1,6 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.android.library")
+    id("kotlin-android")
     id("maven-publish")
 }
 
@@ -50,12 +50,16 @@ android {
 
 dependencies {
 
-    implementation(libs.androidx.lifecycle.runtime.compose.android)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.material3)
-    implementation(libs.bundles.media3Exoplayer)
+    //noinspection UseTomlInstead
+    implementation("androidx.lifecycle:lifecycle-runtime-compose-android:2.8.4")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose-android:2.8.4")
+    implementation(platform("androidx.compose:compose-bom:2024.06.00"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.material3:material3-android:1.2.1")
+
+    implementation("androidx.media3:media3-exoplayer:1.4.0")
+    implementation("androidx.media3:media3-ui:1.4.0")
+    implementation("androidx.media3:media3-common:1.4.0")
 
 }
 
