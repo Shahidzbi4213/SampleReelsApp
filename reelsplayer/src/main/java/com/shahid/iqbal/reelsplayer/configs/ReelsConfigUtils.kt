@@ -3,8 +3,9 @@ package com.shahid.iqbal.reelsplayer.configs
 import android.content.Context
 import android.os.Environment
 import android.os.StatFs
-import android.util.Log
+import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.annotation.OptIn
 import androidx.media3.common.C
 import androidx.media3.common.util.RepeatModeUtil
@@ -65,21 +66,26 @@ object ReelsConfigUtils {
         }
     }
 
-    fun PlayerView.hideControllersViews() {
+    private fun PlayerView.hideControllersViews() {
         setShowBuffering(PlayerView.SHOW_BUFFERING_NEVER)
         setShowRewindButton(false)
         setShowVrButton(false)
         setShowSubtitleButton(false)
         setShowShuffleButton(false)
         setShowFastForwardButton(false)
+        setShowNextButton(false)
+        setShowPreviousButton(false)
+        findViewById<ImageButton>(androidx.media3.ui.R.id.exo_settings).visibility = View.GONE
     }
 
     fun PlayerView.setPlayerAttributes(reelConfig: ReelsConfig) {
         layoutParams =
             ViewGroup.LayoutParams(reelConfig.playerSize.width, reelConfig.playerSize.height)
-        useController = reelConfig.showControlsMenu
         resizeMode = getResizeMode(reelConfig.playerResizeMode)
         artworkDisplayMode = getThumbnailDisplayMode(reelConfig.thumbnailDisplayMode)
+        setControllerAnimationEnabled(true)
+
+        hideControllersViews()
     }
 
 
@@ -96,9 +102,6 @@ object ReelsConfigUtils {
     fun cachingWorkFactory(context: Context): CacheReel {
         val databaseProvider = StandaloneDatabaseProvider(context)
         val maxBytes = getAvailableSpace()
-
-        Log.d("RRR", "cachingWorkFactory: $maxBytes ")
-
 
         val cache =
             SimpleCache(

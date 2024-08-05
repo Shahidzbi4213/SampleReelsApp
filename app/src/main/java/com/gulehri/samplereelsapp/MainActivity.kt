@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.gulehri.samplereelsapp.ui.theme.SampleReelsAppTheme
 import com.shahid.iqbal.reelsplayer.components.ReelsPlayer
+import com.shahid.iqbal.reelsplayer.configs.ReelsConfig
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalFoundationApi::class)
@@ -53,6 +54,7 @@ class MainActivity : ComponentActivity() {
                         ReelsPlayer(
                             modifier = Modifier
                                 .fillMaxSize(),
+                            reelConfig = ReelsConfig(),
                             videoList = listOf(
                                 "https://vue-3-tiktok.vercel.app/video1.mp4",
                                 "https://vue-3-tiktok.vercel.app/video2.mp4",

@@ -2,13 +2,21 @@ package com.shahid.iqbal.reelsplayer.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -16,7 +24,6 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.shahid.iqbal.reelsplayer.configs.ReelsConfig
-import com.shahid.iqbal.reelsplayer.configs.ReelsConfigUtils.hideControllersViews
 import com.shahid.iqbal.reelsplayer.configs.ReelsConfigUtils.setPlayerAttributes
 
 /*
@@ -35,6 +42,12 @@ fun PageContent(
     isPlayerLoading: Boolean,
 ) {
 
+    var showControlsMenu by remember {
+        mutableStateOf(false)
+    }
+
+
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -47,11 +60,21 @@ fun PageContent(
                 PlayerView(ctx).apply {
                     player = exoPlayer
                     setPlayerAttributes(reelConfig)
-                    hideControllersViews()
+                    useController = true
+                    controllerAutoShow = false
+                    controllerHideOnTouch = false
+                    hideController()
 
-                    if (!reelConfig.showControlsMenu) hideController()
+                    setOnClickListener {
+                        showControlsMenu = !showControlsMenu
+
+                        if (showControlsMenu)
+                            showController()
+                        else hideController()
+                    }
                 }
-            }, modifier = Modifier.fillMaxSize(), update = {
+            }, modifier = Modifier
+                .fillMaxSize(), update = {
                 exoPlayer.playWhenReady = true
             }, onRelease = {
                 it.player = null
@@ -70,4 +93,14 @@ fun PageContent(
     }
 
 
+}
+
+@ReadOnlyComposable
+@Composable
+fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
+    this.clickable(
+        indication = null,
+        interactionSource = remember { MutableInteractionSource() }) {
+        onClick()
+    }
 }
