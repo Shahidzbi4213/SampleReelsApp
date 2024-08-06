@@ -26,7 +26,7 @@ import com.shahid.iqbal.reelsplayer.actions.VideoScalingMode
 @Keep
 data class ReelsConfig(
     val playerResizeMode: PlayerResizeMode = PlayerResizeMode.FILL,
-    val videoScalingMode: VideoScalingMode = VideoScalingMode.FIT_WITH_CROPPING,
+    val videoScalingMode: VideoScalingMode = VideoScalingMode.DEFAULT,
     val repeatMode: RepeatMode = RepeatMode.CURRENT,
     val thumbnailDisplayMode: ThumbnailDisplayMode = ThumbnailDisplayMode.FILL,
     val enableCache: Boolean = true,

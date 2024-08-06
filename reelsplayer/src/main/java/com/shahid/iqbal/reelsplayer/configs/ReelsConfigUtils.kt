@@ -6,6 +6,7 @@ import android.os.StatFs
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import androidx.annotation.OptIn
 import androidx.media3.common.C
 import androidx.media3.common.util.RepeatModeUtil
@@ -76,6 +77,7 @@ object ReelsConfigUtils {
         setShowNextButton(false)
         setShowPreviousButton(false)
         findViewById<ImageButton>(androidx.media3.ui.R.id.exo_settings).visibility = View.GONE
+        findViewById<LinearLayout>(androidx.media3.ui.R.id.exo_time).visibility = View.GONE
     }
 
     fun PlayerView.setPlayerAttributes(reelConfig: ReelsConfig) {

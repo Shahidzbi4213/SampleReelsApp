@@ -59,7 +59,6 @@ dependencies {
 
     implementation("androidx.media3:media3-exoplayer:1.4.0")
     implementation("androidx.media3:media3-ui:1.4.0")
-    implementation("androidx.media3:media3-common:1.4.0")
 
 }
 
@@ -71,7 +70,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.shahidzbi4213"
                 artifactId = "reels-player"
-                version = "1.0.4-beta"
+                version = "1.0.5-beta"
             }
         }
     }
