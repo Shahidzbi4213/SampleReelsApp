@@ -71,7 +71,7 @@ Or you can find latest version and changelogs in the [releases](https://github.c
 
 **Shahid Iqbal**
 
-[![Twitter](https://img.shields.io/badge/-twitter-grey?logo=twitter)](https://twitter.com/shahidzbi)
+[![Twitter](https://img.shields.io/badge/-twitter-grey?logo=x)](https://twitter.com/shahidzbi)
 [![Web](https://img.shields.io/badge/-web-grey?logo=appveyor)](https://shahidzbi.blogspot.com/)
 [![Medium](https://img.shields.io/badge/-medium-grey?logo=medium)](https://medium.com/@shahid.iqbal4213)
 [![Linkedin](https://img.shields.io/badge/-linkedin-grey?logo=linkedin)](https://www.linkedin.com/in/shahidzbi/)
