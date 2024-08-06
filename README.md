@@ -11,12 +11,14 @@
 <br/>
 
 ## Demo
+https://github.com/user-attachments/assets/8ffe9b12-66d2-45db-8fbc-206bd19d8ba0
 
 <br/>
 <br/>
         
 ## 💻 Installation
 In `settings.gradle` of  `app` module include this 
+
 
 ```
  maven(url = "https://jitpack.io")
