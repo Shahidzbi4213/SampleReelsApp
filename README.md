@@ -40,17 +40,15 @@ Or you can find latest version and changelogs in the [releases](https://github.c
 
   ReelsPlayer(
     modifier = Modifier.fillMaxSize(),
-    videoList = listOf(),
+    videoList = listOf("URLS"),
     indexOfVideo = 0,
     config = ReelsConfig(
         playerResizeMode = PlayerResizeMode.FILL,
         videoScalingMode = VideoScalingMode.FIT_WITH_CROPPING,
         repeatMode = RepeatMode.ALL,
         thumbnailDisplayMode = ThumbnailDisplayMode.FILL,
-        showControlsMenu = true,
         enableCache = true,
-        playerSize = Size(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT),
-        playerLoader = { /* Custom Loader Composable */ }
+        playerSize = Size(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
     )
 ) { page ->
     // Perform Other Operation Based on Page Number
