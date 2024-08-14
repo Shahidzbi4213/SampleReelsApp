@@ -26,8 +26,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.gulehri.samplereelsapp.ui.theme.SampleReelsAppTheme
+import com.shahid.iqbal.reelsplayer.actions.VideoSource
 import com.shahid.iqbal.reelsplayer.components.ReelsPlayer
 import com.shahid.iqbal.reelsplayer.configs.ReelsConfig
+
+/*
+* listOf(
+                                VideoSource.UrlResource("https://vue-3-tiktok.vercel.app/video1.mp4"),
+                                VideoSource.UrlResource("https://vue-3-tiktok.vercel.app/video2.mp4"),
+                                VideoSource.UrlResource("https://i.imgur.com/rzhgpNQ.mp4"),
+                                VideoSource.UrlResource("https://user-images.githubusercontent.com/90382113/170887700-e405c71e-fe31-458d-8572-aea2e801eecc.mp4"),
+                                VideoSource.UrlResource("https://user-images.githubusercontent.com/90382113/170890384-43214cc8-79c6-4815-bcb7-e22f6f7fe1bc.mp4"),
+                                VideoSource.UrlResource("https://user-images.githubusercontent.com/90382113/170889265-7ed9a56c-dd5f-4d78-b453-18b011644da0.mp4"),
+                                VideoSource.UrlResource("https://user-images.githubusercontent.com/90382113/170885742-d82e3b59-e45a-4fcf-a851-fed58ff5a690.mp4")
+                            )*/
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalFoundationApi::class)
@@ -56,14 +68,12 @@ class MainActivity : ComponentActivity() {
                                 .fillMaxSize(),
                             reelConfig = ReelsConfig(),
                             videoList = listOf(
-                                "https://vue-3-tiktok.vercel.app/video1.mp4",
-                                "https://vue-3-tiktok.vercel.app/video2.mp4",
-                                "https://i.imgur.com/rzhgpNQ.mp4",
-                                "https://user-images.githubusercontent.com/90382113/170887700-e405c71e-fe31-458d-8572-aea2e801eecc.mp4",
-                                "https://user-images.githubusercontent.com/90382113/170890384-43214cc8-79c6-4815-bcb7-e22f6f7fe1bc.mp4",
-                                "https://user-images.githubusercontent.com/90382113/170889265-7ed9a56c-dd5f-4d78-b453-18b011644da0.mp4",
-                                "https://user-images.githubusercontent.com/90382113/170885742-d82e3b59-e45a-4fcf-a851-fed58ff5a690.mp4"
-
+                                VideoSource.HlsResource(
+                                    "http://d3rlna7iyyu8wu.cloudfront.net/skip_armstrong/skip_armstrong_stereo_subs.m3u8"
+                                ),
+                                VideoSource.HlsResource(
+                                    "https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8"
+                                )
                             ),
                             indexOfVideo = indexOfVideo,
                         ) { page ->

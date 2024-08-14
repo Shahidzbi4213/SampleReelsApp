@@ -21,12 +21,10 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.common.C
-import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.source.ProgressiveMediaSource
+import com.shahid.iqbal.reelsplayer.actions.VideoSource
 import com.shahid.iqbal.reelsplayer.configs.ReelsConfig
 import com.shahid.iqbal.reelsplayer.configs.ReelsConfigUtils
 
@@ -35,22 +33,27 @@ import com.shahid.iqbal.reelsplayer.configs.ReelsConfigUtils
  */
 
 /**
- * A composable function for playing a list of videos similar to the experience on Instagram and TikTok.
-
+ * A composable function for playing a list of videos, providing an experience similar to Instagram
+ * and TikTok. This function supports various types of video sources, including URLs, raw resources,
+ * assets, and HLS streams.
+ *
  * @param modifier A [Modifier] to apply to this layout.
  * @param reelConfig The configuration settings for the reels player.
- * @param videoList A list of video URLs to be played.
+ * @param videoList A list of [VideoSource] objects representing the videos to be played.
+ *                  These can include URLs, raw resources, assets, or HLS streams.
  * @param indexOfVideo The initial index of the video to start playing.
  * @param pageSpacing The spacing between pages in the pager.
  * @param contentPadding Padding to be applied to the content inside the pager.
+ * @param currentPage A lambda function to be invoked when the current page (video) changes.
  */
+
 @ExperimentalFoundationApi
 @OptIn(UnstableApi::class)
 @Composable
 fun ReelsPlayer(
     modifier: Modifier = Modifier,
     reelConfig: ReelsConfig = ReelsConfig(),
-    videoList: List<String>,
+    videoList: List<VideoSource>,
     indexOfVideo: Int = 0,
     pageSpacing: Dp = 0.dp,
     contentPadding: PaddingValues = PaddingValues(0.dp),
@@ -125,10 +128,12 @@ fun ReelsPlayer(
     LaunchedEffect(pageState.currentPage) {
         with(exoPlayer) {
             setMediaSource(
-                ProgressiveMediaSource.Factory(if (reelConfig.enableCache) cacheReel.cacheDataSource else DefaultHttpDataSource.Factory())
-                    .createMediaSource(
-                        MediaItem.Builder().setUri(videoList[pageState.currentPage]).build()
-                    )
+                getMediaSource(
+                    context,
+                    videoList[pageState.currentPage],
+                    reelConfig.enableCache,
+                    cacheReel
+                )
             )
             prepare()
         }
@@ -154,7 +159,7 @@ fun ReelsPlayer(
         beyondBoundsPageCount = 0,
         pageSpacing = pageSpacing,
         contentPadding = contentPadding,
-        key = { videoList[it] }) { page ->
+        key = { videoList[it].toString() }) { page ->
 
         PageContent(
             exoPlayer = exoPlayer,
