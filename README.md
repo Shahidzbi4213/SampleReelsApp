@@ -11,12 +11,14 @@
 <br/>
 
 ## Demo
+https://github.com/user-attachments/assets/8ffe9b12-66d2-45db-8fbc-206bd19d8ba0
 
 <br/>
 <br/>
         
 ## 💻 Installation
 In `settings.gradle` of  `app` module include this 
+
 
 ```
  maven(url = "https://jitpack.io")
@@ -40,17 +42,15 @@ Or you can find latest version and changelogs in the [releases](https://github.c
 
   ReelsPlayer(
     modifier = Modifier.fillMaxSize(),
-    videoList = listOf(),
+    videoList = listOf("URLS"),
     indexOfVideo = 0,
     config = ReelsConfig(
         playerResizeMode = PlayerResizeMode.FILL,
         videoScalingMode = VideoScalingMode.FIT_WITH_CROPPING,
         repeatMode = RepeatMode.ALL,
         thumbnailDisplayMode = ThumbnailDisplayMode.FILL,
-        showControlsMenu = true,
         enableCache = true,
-        playerSize = Size(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT),
-        playerLoader = { /* Custom Loader Composable */ }
+        playerSize = Size(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
     )
 ) { page ->
     // Perform Other Operation Based on Page Number
@@ -71,7 +71,7 @@ Or you can find latest version and changelogs in the [releases](https://github.c
 
 **Shahid Iqbal**
 
-[![Twitter](https://img.shields.io/badge/-twitter-grey?logo=twitter)](https://twitter.com/shahidzbi)
+[![Twitter](https://img.shields.io/badge/-twitter-grey?logo=x)](https://twitter.com/shahidzbi)
 [![Web](https://img.shields.io/badge/-web-grey?logo=appveyor)](https://shahidzbi.blogspot.com/)
 [![Medium](https://img.shields.io/badge/-medium-grey?logo=medium)](https://medium.com/@shahid.iqbal4213)
 [![Linkedin](https://img.shields.io/badge/-linkedin-grey?logo=linkedin)](https://www.linkedin.com/in/shahidzbi/)
