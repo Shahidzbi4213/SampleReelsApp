@@ -66,7 +66,7 @@ The `ReelsPlayer` library supports various video source types. Below is a table 
 | **Source Type** | **Description**                                             | **Usage Example**                                      |
 |-----------------|-------------------------------------------------------------|--------------------------------------------------------|
 | **Raw Resources** | Videos stored in your app’s `res/raw` directory.          | `videoList = listOf(VideoSource.RawResource(R.raw.video_file))` |
-| **Assets**       | Videos included in your app’s `assets` folder.            | `videoList = listOf(VideoSource.AssetResource("file:///android_asset/video_file.mp4"))` |
+| **Assets**       | Videos included in your app’s `assets` folder.            | `videoList = listOf(VideoSource.AssetResource("asset:///video_file.mp4"))` |
 | **URLs**         | Videos streamed from external URLs.                        | `videoList = listOf(VideoSource.UrlResource("https://example.com/video.mp4"))` |
 | **HLS Media**    | Videos using HTTP Live Streaming (HLS) for adaptive bitrate streaming. | `videoList = listOf(VideoSource.HlsResource("http://streaningvideo.com"))` |
 
