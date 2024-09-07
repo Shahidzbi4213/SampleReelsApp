@@ -46,34 +46,43 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
 }
 
 dependencies {
 
     //noinspection UseTomlInstead
-    implementation("androidx.lifecycle:lifecycle-runtime-compose-android:2.8.4")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.4")
-    implementation(platform("androidx.compose:compose-bom:2024.06.00"))
+    implementation("androidx.lifecycle:lifecycle-runtime-compose-android:2.8.5")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.5")
+    implementation(platform("androidx.compose:compose-bom:2024.09.00"))
     implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.material3:material3-android:1.2.1")
+    implementation("androidx.compose.material3:material3-android:1.3.0")
 
-    implementation("androidx.media3:media3-exoplayer:1.4.0")
-    implementation("androidx.media3:media3-ui:1.4.0")
-    implementation("androidx.media3:media3-exoplayer-hls:1.4.0")
+    implementation("androidx.media3:media3-exoplayer:1.4.1")
+    implementation("androidx.media3:media3-ui:1.4.1")
+    implementation("androidx.media3:media3-exoplayer-hls:1.4.1")
 
 
 }
 
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            groupId = "com.github.shahidzbi4213"
+            artifactId = "reels-player"
+            version = "2.0.0"
 
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("maven") {
+            afterEvaluate {
                 from(components["release"])
-                groupId = "com.github.shahidzbi4213"
-                artifactId = "reels-player"
-                version = "1.0.1"
             }
         }
     }
 }
+
+

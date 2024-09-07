@@ -31,7 +31,6 @@ import com.shahid.iqbal.reelsplayer.configs.ReelsConfigUtils.setPlayerAttributes
  */
 
 @androidx.annotation.OptIn(UnstableApi::class)
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PageContent(
     modifier: Modifier = Modifier,

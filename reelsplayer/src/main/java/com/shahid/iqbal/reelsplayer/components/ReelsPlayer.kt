@@ -156,7 +156,7 @@ fun ReelsPlayer(
 
     VerticalPager(state = pageState,
         modifier = modifier,
-        beyondBoundsPageCount = 0,
+        beyondViewportPageCount = 0,
         pageSpacing = pageSpacing,
         contentPadding = contentPadding,
         key = { videoList[it].toString() }) { page ->
