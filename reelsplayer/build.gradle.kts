@@ -20,7 +20,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -76,7 +76,7 @@ publishing {
         create<MavenPublication>("release") {
             groupId = "com.github.shahidzbi4213"
             artifactId = "reels-player"
-            version = "2.0.0"
+            version = "2.0.1"
 
             afterEvaluate {
                 from(components["release"])
