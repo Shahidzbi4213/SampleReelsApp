@@ -30,7 +30,7 @@ In `build.gradle` of `app` module, include this dependency
  implementation ("com.github.Shahidzbi4213:SampleReelsApp:x.y.z")
 ```
         
-Please replace x, y and z with the latest version numbers ![](https://img.shields.io/jitpack/version/com.github.Shahidzbi4213/SampleReelsApp.svg).
+Please replace x, y and z with the latest version numbers [![](https://jitpack.io/v/Shahidzbi4213/SampleReelsApp.svg)](https://jitpack.io/#Shahidzbi4213/SampleReelsApp).
         
 Or you can find latest version and changelogs in the [releases](https://github.com/Shahidzbi4213/SampleReelsApp/releases).
 
