@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "SampleReelsApp"
+rootProject.name = "Reels Player"
 include(":app")
 include(":reelsplayer")
