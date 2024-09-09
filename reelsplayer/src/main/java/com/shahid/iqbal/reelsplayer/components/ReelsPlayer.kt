@@ -25,6 +25,7 @@ import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import com.shahid.iqbal.reelsplayer.actions.VideoSource
+import com.shahid.iqbal.reelsplayer.configs.CacheInstance
 import com.shahid.iqbal.reelsplayer.configs.ReelsConfig
 import com.shahid.iqbal.reelsplayer.configs.ReelsConfigUtils
 
@@ -71,7 +72,7 @@ fun ReelsPlayer(
     val index by remember { mutableIntStateOf(indexOfVideo) }
     val pageState = rememberPagerState(initialPage = index) { listOfVideos.size }
 
-    val cacheReel = remember { ReelsConfigUtils.cachingWorkFactory(context) }
+    val cacheReel = remember { CacheInstance.cachingWorkFactory(context) }
 
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build().apply {
@@ -105,7 +106,7 @@ fun ReelsPlayer(
                 Lifecycle.Event.ON_PAUSE -> exoPlayer.pause()
                 Lifecycle.Event.ON_DESTROY -> {
 
-                    if (reelConfig.enableCache) ReelsConfigUtils.clearResources(context, cacheReel)
+                    if (reelConfig.enableCache) CacheInstance.clearResources(context, cacheReel)
 
                     exoPlayer.stop()
                     exoPlayer.release()

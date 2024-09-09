@@ -8,7 +8,7 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.4"
 activityCompose = "1.9.1"
 composeBom = "2024.06.00"
-lifecycleViewmodelAndroid = "2.8.4"
+coilCompose = "2.7.0"
 
 
 
@@ -24,6 +24,9 @@ androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+coil-video-compose = { module = "io.coil-kt:coil-video", version.ref = "coilCompose" }
 
 
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }

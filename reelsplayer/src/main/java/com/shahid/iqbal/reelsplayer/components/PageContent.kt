@@ -1,6 +1,5 @@
 package com.shahid.iqbal.reelsplayer.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -89,17 +88,5 @@ fun PageContent(
                 )
             }
         }
-    }
-
-
-}
-
-@ReadOnlyComposable
-@Composable
-fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
-    this.clickable(
-        indication = null,
-        interactionSource = remember { MutableInteractionSource() }) {
-        onClick()
     }
 }

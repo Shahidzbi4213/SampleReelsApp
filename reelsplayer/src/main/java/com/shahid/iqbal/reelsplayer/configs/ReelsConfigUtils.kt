@@ -90,43 +90,4 @@ object ReelsConfigUtils {
         hideControllersViews()
     }
 
-
-    private fun getDirectory(context: Context): File = File(context.cacheDir, "ReelsPlayer")
-
-    private fun getAvailableSpace(): Long {
-        val externalStorageDir = Environment.getExternalStorageDirectory()
-        val stat = StatFs(externalStorageDir.path)
-        val bytesAvailable = stat.availableBlocksLong * stat.blockSizeLong
-        return (bytesAvailable * 0.20).toLong()
-    }
-
-
-    fun cachingWorkFactory(context: Context): CacheReel {
-        val databaseProvider = StandaloneDatabaseProvider(context)
-        val maxBytes = getAvailableSpace()
-
-        val cache =
-            SimpleCache(
-                getDirectory(context),
-                LeastRecentlyUsedCacheEvictor(maxBytes),
-                databaseProvider
-            )
-
-        val cacheDataSourceFactory =
-            CacheDataSource.Factory()
-                .setCache(cache)
-                .setUpstreamDataSourceFactory(DefaultHttpDataSource.Factory())
-
-        return CacheReel(cache, cacheDataSourceFactory)
-
-    }
-
-
-    fun clearResources(context: Context, cacheReel: CacheReel) {
-        CoroutineScope(Dispatchers.IO).launch {
-            cacheReel.cache.release()
-            getDirectory(context).deleteOnExit()
-        }
-    }
-
 }

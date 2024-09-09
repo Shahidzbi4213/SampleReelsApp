@@ -1,112 +1,163 @@
 package com.gulehri.samplereelsapp
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.ImageLoader
+import coil.compose.AsyncImage
+import coil.decode.VideoFrameDecoder
+import coil.request.ImageRequest
 import com.gulehri.samplereelsapp.ui.theme.SampleReelsAppTheme
 import com.shahid.iqbal.reelsplayer.actions.VideoSource
 import com.shahid.iqbal.reelsplayer.components.ReelsPlayer
 import com.shahid.iqbal.reelsplayer.configs.ReelsConfig
 
 /*
-* listOf(
-                                VideoSource.UrlResource("https://vue-3-tiktok.vercel.app/video1.mp4"),
-                                VideoSource.UrlResource("https://vue-3-tiktok.vercel.app/video2.mp4"),
-                                VideoSource.UrlResource("https://i.imgur.com/rzhgpNQ.mp4"),
-                                VideoSource.UrlResource("https://user-images.githubusercontent.com/90382113/170887700-e405c71e-fe31-458d-8572-aea2e801eecc.mp4"),
-                                VideoSource.UrlResource("https://user-images.githubusercontent.com/90382113/170890384-43214cc8-79c6-4815-bcb7-e22f6f7fe1bc.mp4"),
-                                VideoSource.UrlResource("https://user-images.githubusercontent.com/90382113/170889265-7ed9a56c-dd5f-4d78-b453-18b011644da0.mp4"),
-                                VideoSource.UrlResource("https://user-images.githubusercontent.com/90382113/170885742-d82e3b59-e45a-4fcf-a851-fed58ff5a690.mp4")
-                            )*/
+* */
 
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalFoundationApi::class)
+
+    private val mainVm by viewModels<MainVm>()
+
+    @SuppressLint("StateFlowValueCalledInComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             SampleReelsAppTheme {
 
-                val indexOfVideo = 0
-                var currentPage by remember {
-                    mutableIntStateOf(indexOfVideo)
-                }
 
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                val showScreen by mainVm.showScreen.collectAsStateWithLifecycle()
+                val indexOfVideo by mainVm.indexOfVideo.collectAsStateWithLifecycle()
 
+                when (showScreen) {
+                    0 -> {
+                        ReelScreen()
+                    }
 
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding)
-                    ) {
-
-                        ReelsPlayer(
-                            modifier = Modifier
-                                .fillMaxSize(),
-                            reelConfig = ReelsConfig(),
-                            videoList = listOf(
-                                VideoSource.HlsResource(
-                                    "http://d3rlna7iyyu8wu.cloudfront.net/skip_armstrong/skip_armstrong_stereo_subs.m3u8"
-                                ),
-                                VideoSource.HlsResource(
-                                    "https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8"
-                                )
-                            ),
-                            indexOfVideo = indexOfVideo,
-                        ) { page ->
-
-                            currentPage = page
-                        }
-
-
+                    1 -> {
+                        ReelsDetail(indexOfVideo = indexOfVideo)
                     }
                 }
-
 
             }
         }
     }
 
+    @Composable
+    fun ReelScreen() {
+        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
-    @androidx.compose.runtime.Composable
-    fun ReelsDetail(page: Int) {
-
-        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom) {
-
-            Image(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                contentDescription = page.toString(),
+            Box(
                 modifier = Modifier
-                    .size(24.dp)
-                    .clip(CircleShape)
-            )
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            ) {
 
-            Column(modifier = Modifier.fillMaxSize()) {
-                Text(text = "User $page")
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(100.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    contentPadding = PaddingValues(10.dp)
+                ) {
+
+
+                    items(mainVm.videoList) {
+                        SingleTrendingItem(url = it.videoUrl) {
+                            mainVm.showScreen.value = 1
+                            mainVm.indexOfVideo.value = mainVm.videoList.indexOf(it)
+                        }
+                    }
+
+
+                }
+            }
+
+        }
+    }
+
+    @Composable
+    fun SingleTrendingItem(url: String, onClick: () -> Unit) {
+
+        val context = LocalContext.current
+        val model = remember { ImageRequest.Builder(context).data(url).crossfade(true).build() }
+        val imageLoader = remember { ImageLoader.Builder(context).components { add(VideoFrameDecoder.Factory()) }.build() }
+
+
+        AsyncImage(
+            model = model,
+            contentDescription = null,
+            imageLoader = imageLoader,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .clickable { onClick() }
+                .fillMaxWidth()
+                .height(220.dp)
+                .clip(RoundedCornerShape(10.dp))
+        )
+    }
+
+
+    @OptIn(ExperimentalFoundationApi::class)
+    @Composable
+    fun ReelsDetail(indexOfVideo: Int) {
+
+        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+
+
+            BackHandler {
+                mainVm.showScreen.value = 0
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            ) {
+
+                ReelsPlayer(
+                    modifier = Modifier.fillMaxSize(),
+                    reelConfig = ReelsConfig(),
+                    videoList = mainVm.videoList,
+                    indexOfVideo = indexOfVideo,
+                ) { page ->
+
+                    mainVm.currentPage.value = page
+                }
+
+
             }
         }
+
     }
 }

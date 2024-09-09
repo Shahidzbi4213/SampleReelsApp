@@ -61,6 +61,10 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(project(":reelsplayer"))
 
+    implementation(libs.coil.compose)
+    implementation(libs.coil.video.compose)
+
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

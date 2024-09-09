@@ -76,7 +76,7 @@ publishing {
         create<MavenPublication>("release") {
             groupId = "com.github.shahidzbi4213"
             artifactId = "reels-player"
-            version = "2.0.0"
+            version = "2.0.3"
 
             afterEvaluate {
                 from(components["release"])
