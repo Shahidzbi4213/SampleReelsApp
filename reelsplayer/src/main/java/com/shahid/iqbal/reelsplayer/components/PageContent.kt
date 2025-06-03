@@ -1,5 +1,6 @@
 package com.shahid.iqbal.reelsplayer.components
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,12 +19,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
+import com.shahid.iqbal.reelsplayer.actions.VideoSource
 import com.shahid.iqbal.reelsplayer.configs.ReelsConfig
+import com.shahid.iqbal.reelsplayer.configs.ReelsConfigUtils.getVideoThumbnail
 import com.shahid.iqbal.reelsplayer.configs.ReelsConfigUtils.setPlayerAttributes
 
 /*
@@ -38,20 +43,24 @@ fun PageContent(
     pagerState: PagerState,
     reelConfig: ReelsConfig,
     isPlayerLoading: Boolean,
+    videoSource: VideoSource,
 ) {
-
     var showControlsMenu by remember {
         mutableStateOf(false)
     }
 
+    val context = LocalContext.current
+    var thumbnail by remember(videoSource) { mutableStateOf<Bitmap?>(null) }
 
+    LaunchedEffect(Unit){
+        thumbnail= getVideoThumbnail(context,videoSource)
+    }
 
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(Color.Black)
     ) {
-
         if (page == pagerState.currentPage) {
 
             AndroidView({ ctx ->
@@ -66,13 +75,11 @@ fun PageContent(
                     setOnClickListener {
                         showControlsMenu = !showControlsMenu
 
-                        if (showControlsMenu)
-                            showController()
+                        if (showControlsMenu) showController()
                         else hideController()
                     }
                 }
-            }, modifier = Modifier
-                .fillMaxSize(), update = {
+            }, modifier = Modifier.fillMaxSize(), update = { playerView ->
                 exoPlayer.playWhenReady = true
             }, onRelease = {
                 it.player = null
@@ -81,10 +88,8 @@ fun PageContent(
             /*Show Loader If Player is Buffering*/
             if (isPlayerLoading) {
                 reelConfig.playerLoader?.invoke() ?: DefaultVideoLoader(
-                    modifier = Modifier
-                        .size(50.dp)
-                        .align(Alignment.Center)
-
+                    modifier = Modifier.fillMaxSize().align(Alignment.Center),
+                    thumbnail = thumbnail
                 )
             }
         }

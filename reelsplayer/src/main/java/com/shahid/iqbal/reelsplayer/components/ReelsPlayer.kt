@@ -167,7 +167,8 @@ fun ReelsPlayer(
             page = page,
             pagerState = pageState,
             reelConfig = reelConfig,
-            isPlayerLoading = playerUiState.isLoading
+            isPlayerLoading = playerUiState.isLoading,
+            videoSource = videoList[page]
         )
     }
 }
