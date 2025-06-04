@@ -1,6 +1,9 @@
 package com.shahid.iqbal.reelsplayer.configs
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.media.MediaMetadataRetriever
+import android.net.Uri
 import android.os.Environment
 import android.os.StatFs
 import android.view.View
@@ -22,9 +25,11 @@ import com.shahid.iqbal.reelsplayer.actions.PlayerResizeMode
 import com.shahid.iqbal.reelsplayer.actions.RepeatMode
 import com.shahid.iqbal.reelsplayer.actions.ThumbnailDisplayMode
 import com.shahid.iqbal.reelsplayer.actions.VideoScalingMode
+import com.shahid.iqbal.reelsplayer.actions.VideoSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
 /*
@@ -89,5 +94,48 @@ object ReelsConfigUtils {
 
         hideControllersViews()
     }
+
+
+    /*
+    * This function will get the video thumbnail and return as a bitmap
+    * if its successful in retrieving it.
+    */
+
+    suspend fun getVideoThumbnail(context: Context, source: VideoSource): Bitmap? =
+        withContext(Dispatchers.IO) {
+            try {
+                val retriever = MediaMetadataRetriever()
+
+                when (source) {
+                    is VideoSource.UrlResource -> {
+                        retriever.setDataSource(source.videoUrl, HashMap()) // Network
+                    }
+
+                    is VideoSource.RawResource -> {
+                        val uri =
+                            Uri.parse("android.resource://${context.packageName}/${source.resourceId}")
+                        retriever.setDataSource(context, uri)
+                    }
+
+                    is VideoSource.AssetResource -> {
+                        val afd = context.assets.openFd(source.assetPath)
+                        retriever.setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
+                        afd.close()
+                    }
+
+                    is VideoSource.HlsResource -> {
+                        // Might fail — HLS (m3u8) is not always supported
+                        retriever.setDataSource(source.streamingUrl, HashMap())
+                    }
+                }
+
+                val frame = retriever.getFrameAtTime(0, MediaMetadataRetriever.OPTION_CLOSEST)
+                retriever.release()
+                frame
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        }
 
 }
